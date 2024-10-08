@@ -10,7 +10,7 @@ body {
     font-family: Times New Roman, serif;
     color: #000;
     line-height: 1.6;
-    margin: 20px;
+    margin: 20px auto;
     max-width: 800px;
 }
 
