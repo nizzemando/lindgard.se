@@ -12,6 +12,7 @@ body {
     line-height: 1.6;
     margin: 20px auto;
     max-width: 800px;
+    background-color: #f5f5dc; /* Ljus beige bakgrund */
 }
 
 /* Header */
@@ -58,7 +59,8 @@ tab-content {
 .container {
     max-width: 800px;
     margin: 0 auto;
-    padding: 20px;
+    padding: 20px 40px;
+    background-color: #fff; /* Vit bakgrund för container */
     /* border-left: 2px solid #000; /* Vänster vertikal linje */
     /* border-right: 2px solid #000; /* Höger vertikal linje */
 }
