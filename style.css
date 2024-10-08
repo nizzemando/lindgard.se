@@ -42,8 +42,12 @@ nav ul li a {
 }
 
 /* Tab content */
-.tab-content {
+tab-content {
     display: none;
+    max-width: 600px;
+    margin: 0 auto; /* Centrerar flikens innehåll */
+    padding: 20px;
+    text-align: left;
 }
 
 .tab-content:target {
