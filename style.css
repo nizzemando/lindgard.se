@@ -54,12 +54,6 @@ tab-content {
     display: block;
 }
 
-/* Responsive design for navigation */
-@media (max-width: 600px) {
-    nav ul {
-        flex-direction: column;
-        gap: 10px;
-    }
 /* Container för att centrera allt innehåll med vertikala linjer */
 .container {
     max-width: 800px;
@@ -68,4 +62,11 @@ tab-content {
     border-left: 2px solid #000; /* Vänster vertikal linje */
     border-right: 2px solid #000; /* Höger vertikal linje */
 }
+
+/* Responsive design for navigation */
+@media (max-width: 600px) {
+    nav ul {
+        flex-direction: column;
+        gap: 10px;
+    }
 }
