@@ -16,12 +16,12 @@ body {
 
 /* Header */
 header {
-    text-align: Middle;
+    text-align: center;
     margin-bottom: 20px;
 }
 
 header h1 {
-    font-size: 2rem;
+    font-size: 3rem;
     margin-bottom: 10px;
 }
 
