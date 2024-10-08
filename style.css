@@ -59,8 +59,8 @@ tab-content {
     max-width: 800px;
     margin: 0 auto;
     padding: 20px;
-    border-left: 2px solid #000; /* Vänster vertikal linje */
-    border-right: 2px solid #000; /* Höger vertikal linje */
+    /* border-left: 2px solid #000; /* Vänster vertikal linje */
+    /* border-right: 2px solid #000; /* Höger vertikal linje */
 }
 
 /* Responsive design for navigation */
