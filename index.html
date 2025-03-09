@@ -20,6 +20,7 @@
             <li><a href="#" onclick="showTab('om-mig')">Om mig</a></li>
             <li><a href="#" onclick="showTab('cv')">CV</a></li>
             <li><a href="#" onclick="showTab('mer')">Mer</a></li>
+            <li><a href="#" onclick="showTab('map')"Världskarta</a></li>
         </ul>
     </nav>
     
@@ -55,6 +56,18 @@
         <p>Email: nils@lindgard.se</p>
         <p>Hello World! Yo mama!</p>
     </section>
+
+    <section id="map" class="tab-content" style="display: none;">
+        <h2>World Travel Map</h2>
+        <p>Click on a region to zoom in. Countries I have visited are highlighted.</p>
+
+        <svg viewBox="0 0 1000 500">
+            <!-- Example: Highlighted countries -->
+            <rect class="visited" x="300" y="100" width="50" height="50" onclick="alert('You clicked on France!')"></rect>
+            <rect class="visited" x="400" y="120" width="50" height="50" onclick="alert('You clicked on Germany!')"></rect>
+            <rect class="visited" x="500" y="150" width="50" height="50" onclick="alert('You clicked on Sweden!')"></rect>
+    </svg>
+</section>
 
     </div> <!-- Stänger container-diven här -->
         
