@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="sv">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,137 +7,125 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="container"> <!-- Ny container-div börjar här -->
-        
-    <header>
-        <h1>Nils Lindgård</h1>
-    </header>
-    <hr>
-        
-    <!-- Navigation för flikarna -->
-    <nav>
-        <ul>
-            <li><a href="#" onclick="showTab('om-mig')">Om mig</a></li>
-            <li><a href="#" onclick="showTab('cv')">CV</a></li>
-            <li><a href="#" onclick="showTab('mer')">Mer</a></li>
-            <li><a href="#" onclick="showTab('map')">Världskarta</a></li>
-        </ul>
-    </nav>
-    
-    <!-- Flik: Om mig -->
-    <section id="om-mig" class="tab-content">
-        <h2>Om Mig</h2>
-        <!-- Här kan du lägga till annan information senare -->
-    </section>
-    
-    <!-- Flik: CV -->
-    <section id="cv" class="tab-content" style="display: none;">
-    <h2>CV</h2>
+    <div class="container">
 
-    <h3>Education</h3>
-    <hr>
-    <p><strong>Faculty of Engineering, LTH, Lund University</strong></p>
-    <p><em>Aug 2020 – Jun 2025</em></p>
-    <p>M.Sc. in Industrial Engineering & Management, - 5<sup>th</sup> year. Cumulative GPA: 3.95/5.00</p>
-    <p><em>Finished bachelor's in Energy and Environmental Engineering, specializing in Supply Chain Management</em></p>
-</section>
+        <header>
+            <h1>Nils Lindgård</h1>
+        </header>
+        <hr>
 
-    
-    <!-- Flik: Mer (ditt nuvarande innehåll) -->
-    <section id="mer" class="tab-content" style="display: none;">
-        <h2>Mer</h2>
-        <p>Talang | Sångboksförman emeritus | Alvas pojkvän</p>
-        <h3>Erfarenhet</h3>
-        <ul>
-            <li><strong>PostNord AB</strong> - Junior Mailman</li>
-            <li><strong>Gastroskärgården AB</strong> - Kitchen Manager</li>
-        </ul>
-        <h3>Contact</h3>
-        <p>Email: nils@lindgard.se</p>
-        <p>Hello World! Yo mama!</p>
-    </section>
+        <!-- Navigation -->
+        <nav>
+            <ul>
+                <li><a href="#" onclick="showTab('kollektivtrafik')">Kollektivtrafik</a></li>
+                <li><a href="#" onclick="showTab('om-mig')">Om mig</a></li>
+                <li><a href="#" onclick="showTab('cv')">CV</a></li>
+                <li><a href="#" onclick="showTab('mer')">Mer</a></li>
+            </ul>
+        </nav>
 
-    <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>World Travel Map</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f5f5f5;
-            text-align: center;
-        }
-        #map {
-            width: 80%;
-            height: 500px;
-            margin: auto;
-        }
-        .visited {
-            fill: #007BFF;
-            stroke: #ffffff;
-            stroke-width: 1;
-            transition: transform 0.3s ease-in-out, fill 0.3s;
-        }
-        .visited:hover {
-            fill: #0056b3;
-            transform: scale(1.05);
-        }
-    </style>
-    <script src="https://unpkg.com/topojson@3"></script>
-    <script src="https://d3js.org/d3.v6.min.js"></script>
-</head>
-<body>
-    <h2>World Travel Map</h2>
-    <p>Click on a country to highlight where I've been.</p>
-    <svg id="map"></svg>
+        <!-- Flik: Kollektivtrafik (visas först) -->
+        <section id="kollektivtrafik" class="tab-content">
+            <h2>Kollektivtrafik</h2>
+            <p style="margin-bottom: 16px; color: #555;">Nästa avgångar från <strong>Vågmästareplatsen</strong> som är relevanta för mig.</p>
 
-    <script>
-        const mapWidth = 960;
-        const mapHeight = 500;
-        const visitedCountries = ["FRA", "DEU", "SWE"]; // France, Germany, Sweden
+            <div id="vt-widget">
+                <ul id="vt-departures">
+                    <li class="loading">Laddar avgångar...</li>
+                </ul>
+                <p class="vt-footer">Uppdateras automatiskt var 60:e sekund &middot; Källa: ResRobot / Västtrafik</p>
+            </div>
+        </section>
 
-        const svg = d3.select("#map")
-            .attr("width", mapWidth)
-            .attr("height", mapHeight);
+        <!-- Flik: Om mig -->
+        <section id="om-mig" class="tab-content" style="display: none;">
+            <h2>Om Mig</h2>
+            <!-- Här kan du lägga till annan information senare -->
+        </section>
 
-        const projection = d3.geoNaturalEarth1()
-            .scale(150)
-            .translate([mapWidth / 2, mapHeight / 2]);
+        <!-- Flik: CV -->
+        <section id="cv" class="tab-content" style="display: none;">
+            <h2>CV</h2>
+            <h3>Education</h3>
+            <hr>
+            <p><strong>Faculty of Engineering, LTH, Lund University</strong></p>
+            <p><em>Aug 2020 – Jun 2025</em></p>
+            <p>M.Sc. in Industrial Engineering & Management, - 5<sup>th</sup> year. Cumulative GPA: 4.0/5.0</p>
+            <p><em>Finished bachelor's in Energy and Environmental Engineering, specializing in Supply Chain Management</em></p>
+        </section>
 
-        const path = d3.geoPath().projection(projection);
-
-        d3.json("https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json").then(worldData => {
-            const countries = topojson.feature(worldData, worldData.objects.countries);
-            
-            svg.selectAll(".country")
-                .data(countries.features)
-                .enter().append("path")
-                .attr("class", d => visitedCountries.includes(d.id) ? "visited" : "country")
-                .attr("d", path)
-                .attr("fill", d => visitedCountries.includes(d.id) ? "#007BFF" : "#ddd")
-                .attr("stroke", "#fff")
-                .attr("stroke-width", 0.5)
-                .on("click", function(event, d) {
-                    alert("You clicked on " + d.properties.name);
-                });
-        });
-    </script>
-</body>
-</html>
+        <!-- Flik: Mer -->
+        <section id="mer" class="tab-content" style="display: none;">
+            <h2>Mer</h2>
+            <p>Talang | Sångboksförman emeritus | Management Consultant</p>
+            <h3>Erfarenhet</h3>
+            <ul>
+                <li><strong>PostNord AB</strong> - Junior Mailman</li>
+                <li><strong>Gastroskärgården AB</strong> - Kitchen Manager</li>
+            </ul>
+            <h3>Contact</h3>
+            <p>Email: <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="402e292c33002c292e24272132246e3325">[email&#160;protected]</a></p>
+            <p>Hello World! Yo mama!</p>
+        </section>
 
 
-    </div> <!-- Stänger container-diven här -->
-        
-    <script>
-        // Enkel JavaScript-funktion för att växla mellan flikar
+
+    </div><!-- /container -->
+
+    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+        // Tab switching
         function showTab(tabId) {
-            const tabs = document.querySelectorAll('.tab-content');
-            tabs.forEach(tab => {
+            document.querySelectorAll('.tab-content').forEach(tab => {
                 tab.style.display = (tab.id === tabId) ? 'block' : 'none';
             });
         }
-    </script>
-</body>
-</html>
+
+        // Västtrafik departure widget
+        const API_KEY = "47bf9c28-b7b2-496d-83be-66783ea4d350";
+        const STOP_ID  = "740025706"; // Göteborg Vågmästareplatsen
+
+        const FILTERS = [
+            { line: "2",   directionContains: "Brantings" },
+            { line: "5",   directionContains: "Brantings" },
+            { line: "6",   directionContains: "Brantings" },
+            { line: "17",  directionContains: "Brantings" },
+            { line: "25",  directionContains: "Brantings" },
+            { line: "X77", directionContains: "Torslanda"  },
+        ];
+
+        function isWanted(dep) {
+            const line      = dep.ProductAtStop.displayNumber;
+            const direction = dep.direction;
+            return FILTERS.some(f => f.line === line && direction.includes(f.directionContains));
+        }
+
+        function fetchDepartures() {
+            const url = `https://api.resrobot.se/v2.1/departureBoard?id=${STOP_ID}&format=json&accessId=${API_KEY}&maxJourneys=40`;
+            fetch(url)
+                .then(res => res.json())
+                .then(data => {
+                    const list = document.getElementById("vt-departures");
+                    const deps = (data.Departure || []).filter(isWanted);
+
+                    if (deps.length === 0) {
+                        list.innerHTML = "<li class='loading'>Inga relevanta avgångar just nu.</li>";
+                        return;
+                    }
+
+                    list.innerHTML = deps.map(dep => {
+                        const line      = dep.ProductAtStop.displayNumber;
+                        const isTram    = dep.ProductAtStop.catOutS === "SLT";
+                        const icon      = isTram ? "🚃" : "🚌";
+                        const direction = dep.direction
+                            .replace(" (Göteborg kn)", "")
+                            .replace("Göteborg ", "");
+                        const time      = dep.time.slice(0, 5);
+                        return `<li>
+                            <span class="dep-line">${icon} <strong>${line}</strong></span>
+                            <span class="dep-dir">→ ${direction}</span>
+                            <span class="dep-time">${time}</span>
+                        </li>`;
+                    }).join("");
+                })
+                .catch(() => {
+                    document.getElementById("vt-departures").innerHTML =
