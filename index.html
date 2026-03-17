@@ -147,6 +147,32 @@
                 ? `<li style="font-style:italic; color:#888; padding: 6px 14px; border-bottom: 1px solid #eee;">Nästa avgångar är imorgon:</li>`
                 : "";
 
+            // Get the next departure per line
+            const nextPerLine = {};
+            FILTERS.forEach(f => {
+                const next = deps.find(dep =>
+                    dep.ProductAtStop.displayNumber === f.line &&
+                    dep.direction.includes(f.directionContains)
+                );
+                nextPerLine[f.line] = next || null;
+            });
+
+            list.innerHTML = header + FILTERS.map(f => {
+                const dep  = nextPerLine[f.line];
+                const icon = (dep && dep.ProductAtStop.catOutS === "SLT") ? "🚃" : "🚌";
+                const time = dep ? dep.time.slice(0, 5) : "—";
+                return `<li>
+                    <span class="dep-line">${icon} <strong>${f.line}</strong></span>
+                    <span class="dep-dir">→ ${f.directionContains === "Torslanda" ? "Torslanda" : "Hjalmar Brantingspl"}</span>
+                    <span class="dep-time">${time}</span>
+                </li>`;
+            }).join("");
+        }
+
+            const header = isTomorrow
+                ? `<li style="font-style:italic; color:#888; padding: 6px 14px; border-bottom: 1px solid #eee;">Nästa avgångar är imorgon:</li>`
+                : "";
+
             list.innerHTML = header + deps.map(dep => {
                 const line      = dep.ProductAtStop.displayNumber;
                 const isTram    = dep.ProductAtStop.catOutS === "SLT";
