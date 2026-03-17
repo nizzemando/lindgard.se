@@ -28,7 +28,6 @@
         <section id="kollektivtrafik" class="tab-content">
             <h2>Kollektivtrafik</h2>
             <p style="margin-bottom: 16px; color: #555;">Nästa avgångar från <strong>Vågmästareplatsen</strong> som är relevanta för mig.</p>
-
             <div id="vt-widget">
                 <ul id="vt-departures">
                     <li class="loading">Laddar avgångar...</li>
@@ -40,7 +39,6 @@
         <!-- Flik: Om mig -->
         <section id="om-mig" class="tab-content" style="display: none;">
             <h2>Om Mig</h2>
-            <!-- Här kan du lägga till annan information senare -->
         </section>
 
         <!-- Flik: CV -->
@@ -49,86 +47,88 @@
             <h3>Education</h3>
             <hr>
             <p><strong>Faculty of Engineering, LTH, Lund University</strong></p>
-            <p><em>Aug 2020 – Jun 2025</em></p>
-            <p>M.Sc. in Industrial Engineering & Management, - 5<sup>th</sup> year. Cumulative GPA: 3.95/5.00</p>
+            <p><em>Aug 2020 - Jun 2025</em></p>
+            <p>M.Sc. in Industrial Engineering &amp; Management, - 5<sup>th</sup> year. Cumulative GPA: 3.95/5.00</p>
             <p><em>Finished bachelor's in Energy and Environmental Engineering, specializing in Supply Chain Management</em></p>
         </section>
 
         <!-- Flik: Mer -->
         <section id="mer" class="tab-content" style="display: none;">
             <h2>Mer</h2>
-            <p>Talang | Sångboksförman emeritus | Management Consultant</p>
+            <p>Talang | Sangboksforman emeritus | Management Consultant</p>
             <h3>Erfarenhet</h3>
             <ul>
                 <li><strong>PostNord AB</strong> - Junior Mailman</li>
-                <li><strong>Gastroskärgården AB</strong> - Kitchen Manager</li>
+                <li><strong>Gastroskargardem AB</strong> - Kitchen Manager</li>
             </ul>
             <h3>Contact</h3>
-            <p>Email: <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="402e292c33002c292e24272132246e3325">[email&#160;protected]</a></p>
+            <p>Email: nils@lindgard.se</p>
             <p>Hello World! Yo mama!</p>
         </section>
 
+    </div>
 
-
-    </div><!-- /container -->
-
-    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
-        <script>
+    <script>
         function showTab(tabId) {
-            document.querySelectorAll('.tab-content').forEach(tab => {
+            document.querySelectorAll('.tab-content').forEach(function(tab) {
                 tab.style.display = (tab.id === tabId) ? 'block' : 'none';
             });
         }
 
-        const API_KEY = "47bf9c28-b7b2-496d-83be-66783ea4d350";
-        const STOP_ID = "740025706";
+        var API_KEY = "47bf9c28-b7b2-496d-83be-66783ea4d350";
+        var STOP_ID = "740025706";
 
-        const FILTERS = [
+        var FILTERS = [
             { line: "2",   directionContains: "Brantings" },
             { line: "5",   directionContains: "Brantings" },
             { line: "6",   directionContains: "Brantings" },
             { line: "17",  directionContains: "Brantings" },
             { line: "25",  directionContains: "Brantings" },
-            { line: "X77", directionContains: "Torslanda" },
+            { line: "X77", directionContains: "Torslanda" }
         ];
 
         function isWanted(dep) {
-            const line = dep.ProductAtStop.displayNumber;
-            const direction = dep.direction;
-            return FILTERS.some(f => f.line === line && direction.includes(f.directionContains));
+            var line = dep.ProductAtStop.displayNumber;
+            var direction = dep.direction;
+            return FILTERS.some(function(f) {
+                return f.line === line && direction.indexOf(f.directionContains) !== -1;
+            });
         }
 
         function formatDate(date) {
-            return date.toISOString().slice(0, 10);
+            var y = date.getFullYear();
+            var m = String(date.getMonth() + 1).padStart(2, '0');
+            var d = String(date.getDate()).padStart(2, '0');
+            return y + '-' + m + '-' + d;
         }
 
         function renderDepartures(deps, isTomorrow) {
-            const list = document.getElementById("vt-departures");
+            var list = document.getElementById("vt-departures");
+            var html = "";
 
-            const header = isTomorrow
-                ? "<li style='font-style:italic; color:#888; padding: 6px 14px; border-bottom: 1px solid #eee;'>Nästa avgångar är imorgon:</li>"
-                : "";
+            if (isTomorrow) {
+                html += "<li style='font-style:italic; color:#888; padding:6px 14px; border-bottom:1px solid #eee;'>Nasta avganger ar imorgon:</li>";
+            }
 
-            const nextPerLine = {};
-            FILTERS.forEach(f => {
-                const next = deps.find(dep =>
-                    dep.ProductAtStop.displayNumber === f.line &&
-                    dep.direction.includes(f.directionContains)
-                );
-                nextPerLine[f.line] = next || null;
+            FILTERS.forEach(function(f) {
+                var dep = null;
+                for (var i = 0; i < deps.length; i++) {
+                    if (deps[i].ProductAtStop.displayNumber === f.line && deps[i].direction.indexOf(f.directionContains) !== -1) {
+                        dep = deps[i];
+                        break;
+                    }
+                }
+                var icon = (dep && dep.ProductAtStop.catOutS === "SLT") ? "T" : "B";
+                var time = dep ? dep.time.slice(0, 5) : "--:--";
+                var dir = f.directionContains === "Torslanda" ? "Torslanda" : "Hjalmar Brantingspl";
+                html += "<li><span class='dep-line'>" + icon + " <strong>" + f.line + "</strong></span><span class='dep-dir'>to " + dir + "</span><span class='dep-time'>" + time + "</span></li>";
             });
 
-            list.innerHTML = header + FILTERS.map(f => {
-                const dep = nextPerLine[f.line];
-                const icon = (dep && dep.ProductAtStop.catOutS === "SLT") ? "🚃" : "🚌";
-                const time = dep ? dep.time.slice(0, 5) : "—";
-                const dir = f.directionContains === "Torslanda" ? "Torslanda" : "Hjalmar Brantingspl";
-                return "<li><span class='dep-line'>" + icon + " <strong>" + f.line + "</strong></span><span class='dep-dir'>→ " + dir + "</span><span class='dep-time'>" + time + "</span></li>";
-            }).join("");
+            list.innerHTML = html;
         }
 
         function fetchForDate(dateStr, isTomorrow) {
-            const url = "https://api.resrobot.se/v2.1/departureBoard?id=" + STOP_ID + "&format=json&accessId=" + API_KEY + "&maxJourneys=60&date=" + dateStr;
+            var url = "https://api.resrobot.se/v2.1/departureBoard?id=" + STOP_ID + "&format=json&accessId=" + API_KEY + "&maxJourneys=60&date=" + dateStr;
             return fetch(url)
                 .then(function(res) { return res.json(); })
                 .then(function(data) {
@@ -137,8 +137,8 @@
         }
 
         function fetchDepartures() {
-            const today = new Date();
-            const tomorrow = new Date(today);
+            var today = new Date();
+            var tomorrow = new Date(today);
             tomorrow.setDate(tomorrow.getDate() + 1);
 
             fetchForDate(formatDate(today), false)
@@ -151,7 +151,7 @@
                     }
                 })
                 .catch(function() {
-                    document.getElementById("vt-departures").innerHTML = "<li class='loading'>Kunde inte hämta avgångar.</li>";
+                    document.getElementById("vt-departures").innerHTML = "<li class='loading'>Kunde inte hamta avganger.</li>";
                 });
         }
 
@@ -160,4 +160,3 @@
     </script>
 </body>
 </html>
-            
