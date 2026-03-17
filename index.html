@@ -82,7 +82,7 @@
 
         // Västtrafik departure widget
         const API_KEY = "47bf9c28-b7b2-496d-83be-66783ea4d350";
-        const STOP_ID  = "740025706"; // Göteborg Vågmästareplatsen
+        const STOP_ID = "740025706"; // Göteborg Vågmästareplatsen
 
         const FILTERS = [
             { line: "2",   directionContains: "Brantings" },
@@ -90,7 +90,7 @@
             { line: "6",   directionContains: "Brantings" },
             { line: "17",  directionContains: "Brantings" },
             { line: "25",  directionContains: "Brantings" },
-            { line: "X77", directionContains: "Torslanda"  },
+            { line: "X77", directionContains: "Torslanda" },
         ];
 
         function isWanted(dep) {
@@ -99,38 +99,68 @@
             return FILTERS.some(f => f.line === line && direction.includes(f.directionContains));
         }
 
-        function fetchDepartures() {
-            const url = `https://api.resrobot.se/v2.1/departureBoard?id=${STOP_ID}&format=json&accessId=${API_KEY}&maxJourneys=40`;
-            fetch(url)
+        function formatDate(date) {
+            // Returns YYYY-MM-DD for a given Date object
+            return date.toISOString().slice(0, 10);
+        }
+
+        function fetchForDate(dateStr, isTomorrow) {
+            const url = `https://api.resrobot.se/v2.1/departureBoard?id=${STOP_ID}&format=json&accessId=${API_KEY}&maxJourneys=60&date=${dateStr}`;
+            return fetch(url)
                 .then(res => res.json())
                 .then(data => {
-                    const list = document.getElementById("vt-departures");
                     const deps = (data.Departure || []).filter(isWanted);
+                    return { deps, isTomorrow };
+                });
+        }
 
-                    if (deps.length === 0) {
-                        list.innerHTML = "<li class='loading'>Inga relevanta avgångar just nu.</li>";
-                        return;
+        function fetchDepartures() {
+            const today    = new Date();
+            const tomorrow = new Date(today);
+            tomorrow.setDate(tomorrow.getDate() + 1);
+
+            fetchForDate(formatDate(today), false)
+                .then(({ deps, isTomorrow }) => {
+                    if (deps.length > 0) {
+                        renderDepartures(deps, false);
+                    } else {
+                        // Nothing left tonight — fetch tomorrow
+                        return fetchForDate(formatDate(tomorrow), true)
+                            .then(({ deps: tDeps }) => renderDepartures(tDeps, true));
                     }
-
-                    list.innerHTML = deps.map(dep => {
-                        const line      = dep.ProductAtStop.displayNumber;
-                        const isTram    = dep.ProductAtStop.catOutS === "SLT";
-                        const icon      = isTram ? "🚃" : "🚌";
-                        const direction = dep.direction
-                            .replace(" (Göteborg kn)", "")
-                            .replace("Göteborg ", "");
-                        const time      = dep.time.slice(0, 5);
-                        return `<li>
-                            <span class="dep-line">${icon} <strong>${line}</strong></span>
-                            <span class="dep-dir">→ ${direction}</span>
-                            <span class="dep-time">${time}</span>
-                        </li>`;
-                    }).join("");
                 })
                 .catch(() => {
                     document.getElementById("vt-departures").innerHTML =
                         "<li class='loading'>Kunde inte hämta avgångar. Kontrollera API-nyckeln.</li>";
                 });
+        }
+
+        function renderDepartures(deps, isTomorrow) {
+            const list = document.getElementById("vt-departures");
+
+            if (deps.length === 0) {
+                list.innerHTML = "<li class='loading'>Inga avgångar hittades.</li>";
+                return;
+            }
+
+            const header = isTomorrow
+                ? `<li style="font-style:italic; color:#888; padding: 6px 14px; border-bottom: 1px solid #eee;">Nästa avgångar är imorgon:</li>`
+                : "";
+
+            list.innerHTML = header + deps.map(dep => {
+                const line      = dep.ProductAtStop.displayNumber;
+                const isTram    = dep.ProductAtStop.catOutS === "SLT";
+                const icon      = isTram ? "🚃" : "🚌";
+                const direction = dep.direction
+                    .replace(" (Göteborg kn)", "")
+                    .replace("Göteborg ", "");
+                const time      = dep.time.slice(0, 5);
+                return `<li>
+                    <span class="dep-line">${icon} <strong>${line}</strong></span>
+                    <span class="dep-dir">→ ${direction}</span>
+                    <span class="dep-time">${time}</span>
+                </li>`;
+            }).join("");
         }
 
         fetchDepartures();
