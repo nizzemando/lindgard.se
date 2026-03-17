@@ -118,7 +118,7 @@
                         break;
                     }
                 }
-                var icon = (dep && dep.ProductAtStop.catOutS === "SLT") ? "T" : "B";
+                var icon = (dep && dep.ProductAtStop.catOutS === "SLT") ? "🚃" : "🚌";
                 var time = dep ? dep.time.slice(0, 5) : "--:--";
                 var dir = f.directionContains === "Torslanda" ? "Torslanda" : "Hjalmar Brantingspl";
                 html += "<li><span class='dep-line'>" + icon + " <strong>" + f.line + "</strong></span><span class='dep-dir'>to " + dir + "</span><span class='dep-time'>" + time + "</span></li>";
