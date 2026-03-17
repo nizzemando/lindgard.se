@@ -7,12 +7,12 @@
 
 /* Body */
 body {
-    font-family: Times New Roman, serif;
+    font-family: "Times New Roman", Times, serif;
     color: #000;
     line-height: 1.6;
     margin: 20px auto;
     max-width: 800px;
-    background-color: #f5f5dc; /* Ljus beige bakgrund */
+    background-color: #f5f5dc;
 }
 
 /* Header */
@@ -20,7 +20,6 @@ header {
     text-align: center;
     margin-bottom: 20px;
 }
-
 header h1 {
     font-size: 3rem;
     margin-bottom: 10px;
@@ -30,45 +29,142 @@ header h1 {
 nav ul {
     list-style: none;
     display: flex;
-    justify-content: center; /* Centrerar flikarna horisontellt */
+    justify-content: center;
+    flex-wrap: wrap;
     gap: 20px;
     margin-bottom: 20px;
 }
-
 nav ul li a {
     text-decoration: none;
     color: #000;
     font-weight: bold;
     text-align: center;
 }
+nav ul li a:hover {
+    text-decoration: underline;
+}
 
 /* Tab content */
-tab-content {
+.tab-content {
     display: none;
-    max-width: 600px;
-    margin: 0 auto; /* Centrerar flikens innehåll */
+    max-width: 700px;
+    margin: 0 auto;
     padding: 20px;
     text-align: left;
 }
-
-.tab-content:target {
-    display: block;
+#kollektivtrafik {
+    display: block; /* Show Kollektivtrafik by default */
 }
 
-/* Container för att centrera allt innehåll med vertikala linjer */
+/* Container */
 .container {
     max-width: 800px;
     margin: 0 auto;
     padding: 20px 40px;
-    background-color: #fff; /* Vit bakgrund för container */
-    /* border-left: 2px solid #000; /* Vänster vertikal linje */
-    /* border-right: 2px solid #000; /* Höger vertikal linje */
+    background-color: #fff;
 }
 
-/* Responsive design for navigation */
+/* Headings inside tabs */
+.tab-content h2 {
+    margin-bottom: 12px;
+}
+.tab-content h3 {
+    margin-top: 20px;
+    margin-bottom: 8px;
+}
+.tab-content p,
+.tab-content ul {
+    margin-bottom: 10px;
+}
+.tab-content ul {
+    padding-left: 20px;
+}
+
+/* World map */
+#map-svg {
+    width: 100%;
+    height: auto;
+    display: block;
+    margin-top: 16px;
+}
+
+/* --- Kollektivtrafik / Departure widget --- */
+#vt-widget {
+    margin-top: 8px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    overflow: hidden;
+    max-width: 500px;
+}
+
+#vt-departures {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+#vt-departures li {
+    display: grid;
+    grid-template-columns: 80px 1fr 60px;
+    align-items: center;
+    padding: 9px 14px;
+    border-bottom: 1px solid #eee;
+    font-size: 0.95rem;
+}
+
+#vt-departures li:last-child {
+    border-bottom: none;
+}
+
+#vt-departures li:nth-child(even) {
+    background-color: #fafaf5;
+}
+
+.dep-line {
+    font-weight: bold;
+    white-space: nowrap;
+}
+
+.dep-dir {
+    color: #333;
+    padding: 0 8px;
+}
+
+.dep-time {
+    font-weight: bold;
+    color: #003d6b;
+    text-align: right;
+    font-family: monospace;
+    font-size: 1rem;
+}
+
+.loading {
+    color: #999;
+    font-style: italic;
+    padding: 12px 14px;
+    display: block;
+}
+
+.vt-footer {
+    font-size: 0.75rem;
+    color: #aaa;
+    padding: 8px 14px;
+    border-top: 1px solid #eee;
+    background: #fafafa;
+}
+
+/* Responsive */
 @media (max-width: 600px) {
     nav ul {
         flex-direction: column;
         gap: 10px;
+        align-items: center;
+    }
+    .container {
+        padding: 16px 20px;
+    }
+    #vt-departures li {
+        grid-template-columns: 70px 1fr 50px;
+        font-size: 0.875rem;
     }
 }
