@@ -129,4 +129,13 @@
                 })
                 .catch(() => {
                     document.getElementById("vt-departures").innerHTML =
+                        "<li class='loading'>Kunde inte hämta avgångar. Kontrollera API-nyckeln.</li>";
+                });
+        }
+
+        fetchDepartures();
+        setInterval(fetchDepartures, 60000);
+    </script>
+</body>
+</html>
             
